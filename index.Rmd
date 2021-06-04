@@ -1,0 +1,572 @@
+---
+title: "FO2D Group: 30"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    theme: flatly
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+```
+
+Overview
+=======================================================================
+
+Sidebar {.sidebar data-width=300} 
+-----------------------------------------------------------------------
+**Abstract**
+
+Recently, research in popular music studies seems to document a minor departure from traditional music genres to situational classification of music (situational music - classifying types of music based on function or context, ie. music for studying, workout, cooking music etc). This is also reflected in the rising popularity of Spotify curated playlists that are task-oriented. A lot of research demonstrates that songs, which fall under the same genre, share very similar musical characteristics and / or aesthetic features (eg. Disco music is characterized by its danceability). Ultimately, the shared characteristics are the reason why songs fall under their assigned genre. Given that situational music seems to be on the way to becoming a genre for itself, we aim to document if this type of music might share musical properties that justify why it is used for certain functions / contexts. Therefore, the goal was to examine how a newly emergent musical category as such would relate to the concept of ‘genre’, based on the potential musical patterns that might define it. We identified “focus-enhancing music” and “study music” to be among the most popular situational music categories, therefore, we will inquire into the characteristics of songs that are used for that function, with the hope of capturing their specific commonalities. 
+
+
+Through an online survey, we gathered a list of songs that students passively or actively listen to when engaging in study-related activities. In addition, the participants were also asked to supply the name of songs that they would never listen to while studying, or that they believed would obscure their studying process. The musical characteristics of those songs are then located and visualized through the use of the Spotify API.
+
+The central graph on this page visualizes the weight of musical features (explained in the bottom right) of the aggregated list of songs. Our findings suggest that the preferences for those dynamics are to a major extent similar across those groups for engagement with a study related context. All of the songs that were collected from different populations tend to be characterized by a high presence of ‘intrumentalness’ and ‘acousticness’, while ‘loudness’ tends to be low or absent. ‘Speechines’ (lyrical output) and ‘liveness’ tend to be low as well, but are just as low for focus-destructive music. Surprisingly, the music used for studying is also high in ‘danceability’ and ‘energy’, which are also the features correlating with music that is regarded as unfavorable for the same context. However, when testing it against focus-related playlists that are popular on Spotify (illustrated in the 2nd and 3rd tab), the patterns shift. Accepting the premise that people do use Spotify playlists for their intended situation, the characterization of ‘focus-music’ gets complicated, whereas the characterization is more stable across the preferred study music of our participants.
+
+
+Column {.tabset .tabset-fade}
+-------------------------------------
+    
+### **Study Music Mean Values**
+
+```{r}
+library(plotly)
+library(gridExtra)
+fig <- plot_ly(
+    type = 'scatterpolar',
+    fill = 'toself',
+    mode = 'lines+markers'
+  ) 
+fig <- fig %>%
+  add_trace(
+    r = c(65, 71, 67, 13, 18, 6, 20, 55, 8),
+    theta = c('Danceability','Acousticness', 'Loudness', 'Speechiness', 'Energy', 'Tempo', 'Liveness', 'Valance', 'Instrumentalness'),
+    name = 'Anti-Study Music'
+  ) 
+fig <- fig %>%
+  add_trace(
+    r = c(58, 45, 12, 8, 49, 44, 30, 37, 15),
+    theta = c('Danceability','Acousticness', 'Loudness', 'Speechiness', 'Energy', 'Tempo', 'Liveness', 'Valance', 'Instrumentalness'),
+    name = 'Study Music'
+  ) 
+fig <- fig %>%
+  layout(
+    polar = list(
+      radialaxis = list(
+        visible = T,
+        range = c(0,100)
+      )
+    )
+  )
+fig
+```
+
+### **Spotify Comparison:** Study 
+```{r}
+library(plotly)
+fig <- plot_ly(
+    type = 'scatterpolar',
+    fill = 'toself',
+    mode = 'lines+markers'
+  ) 
+fig <- fig %>%
+  add_trace(
+    r = c(36,	6,	25, 4,	99,	92,	10,	28, 37),
+    theta = c('Danceability','Acousticness', 'Loudness', 'Speechiness', 'Energy', 'Tempo', 'Liveness', 'Valance', 'Instrumentalness'),
+    name = 'Spotify Intense Study'
+  ) 
+fig <- fig %>%
+  add_trace(
+    r = c(58, 45, 12, 8, 49, 44, 15, 37, 30),
+    theta = c('Danceability','Acousticness', 'Loudness', 'Speechiness', 'Energy', 'Tempo', 'Liveness', 'Valance', 'Instrumentalness'),
+    name = 'Study Music'
+  )
+fig <- fig %>%
+  add_trace(
+    r = c(51,	16,	18,	3, 94,	80,	11,	25, 29),
+    theta = c('Danceability','Acousticness', 'Loudness', 'Speechiness', 'Energy', 'Tempo', 'Liveness', 'Valance', 'Instrumentalness'),
+    name = 'Spotify Jazz Study'
+  )
+fig <- fig %>%
+  layout(
+    polar = list(
+      radialaxis = list(
+        visible = T,
+        range = c(0,100)
+      )
+    )
+  )
+fig
+```
+
+### Focus
+
+```{r}
+fig <- plot_ly(
+    type = 'scatterpolar',
+    fill = 'toself',
+    mode = 'lines+markers'
+  ) 
+fig <- fig %>%
+  add_trace(
+    r = c(39, 22, 17, 3,	78,	86,	10,	11, 27),
+    theta = c('Danceability','Acousticness', 'Loudness', 'Speechiness', 'Energy', 'Tempo', 'Liveness', 'Valance', 'Instrumentalness'),
+    name = 'Spotify Deep Focus'
+  ) 
+fig <- fig %>%
+  add_trace(
+    r = c(58, 45, 12, 8, 49, 44, 15, 37, 30),
+    theta = c('Danceability','Acousticness', 'Loudness', 'Speechiness', 'Energy', 'Tempo', 'Liveness', 'Valance', 'Instrumentalness'),
+    name = 'Study Music'
+  ) 
+fig <- fig %>%
+  add_trace(
+    r = c(36,	7,	24,	4,	99,	92,	10,	25, 29),
+    theta = c('Danceability','Acousticness', 'Loudness', 'Speechiness', 'Energy', 'Tempo', 'Liveness', 'Valance', 'Instrumentalness'),
+    name = 'Spotify Instrumental Focus'
+  ) 
+fig <- fig %>%
+  layout(
+    polar = list(
+      radialaxis = list(
+        visible = T,
+        range = c(0,100)
+      )
+    )
+  )
+fig
+```
+
+Column {data-width=300}
+----------------------------------
+### Collected data as playlist (Study):
+
+<iframe src="https://open.spotify.com/embed/playlist/5xLSS4slREH7LE2llXT4Id" width="415" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>  
+
+### What Are Audio Features?
+
+Feature | Explanation
+------------ | -------------
+Valence | A measure describing the musical positiveness conveyed by a track.
+Energy | A perceptual measure of intensity and activity. Typically, energetic tracks feel fast, loud, and noisy. 
+Danceability | Danceability describes how suitable a track is for dancing based on a combination of musical elements (such as tempo).
+Instrumentalness | Predicts whether a track contains no vocals. “Ooh” and “aah” sounds are treated as instrumental in this context. 
+Acousticness | A confidence measure of whether the track is acoustic. 100 represents acousticness, and means there are no electric sounds involved.
+Speechiness | Speechiness detects the presence of spoken words in a track.
+Liveness | Detects the presence of an audience in the recording. Higher liveness values represent an increased probability that the track was performed live.
+Loudness | The overall loudness of a track in decibels (dB). Values typical range between -60 and 0 db (represented on a scale from 0 - 100)
+Tempo | The overall estimated tempo of a track in beats per minute (BPM). Tempo is the speed or pace of a given piece and derives directly from the average beat duration.
+
+
+
+Background
+=======================================================================
+
+
+Column {.tabset} 
+-------------------------------------
+
+### Introduction 
+
+Music is commonly grouped and classified into genres. Remarkably, there is no agreed-upon definition of the term [‘genre’](https://en.wikipedia.org/wiki/Music_genre) in academia [Sturn, 2012](https://dl.acm.org/doi/abs/10.1145/2390848.2390851). Genres are commonly identified based on similarity of patterns that are used to associate a group of songs and ultimately, describe this group as a specific category, a genre [Gjerdingen & Perrott, 2008](https://www.scholars.northwestern.edu/en/publications/scanning-the-dial-the-rapid-recognition-of-music-genres). These patterns are found in characteristics such as rhythm, speechiness and instrumentals, which is the most used music classification method [Ibid](https://www.scholars.northwestern.edu/en/publications/scanning-the-dial-the-rapid-recognition-of-music-genres). Recently, research in popular music seems to document an emergence and popularity in classifying music based on their function or their fit with the situation [Airoldi et al., 2016](https://www.sciencedirect.com/science/article/abs/pii/S0304422X16300973). Hence, the term ‘situational music’ is used to describe this new domain. The recent departure from traditional music genres to situational classification of music is also reflected in the rising popularity of task-oriented, curated playlists on popular streaming platforms.
+
+Research demonstrates that songs, which fall under the same genre, share very similar musical characteristics or aesthetic features [Kaminskas 2012](http://www.inf.unibz.it/~ricci/papers/lit_review_music-context.pdf). For example, disco music is mainly characterised by its ‘danceability’. Given that situational music seems to be on the way to becoming a genre for itself, we aim to examine whether this type of music might share musical properties that justify why it is used for certain functions or contexts. We identified music describing itself as “focus-enhancing music” as our object of study, seeing that this type is currently amongst the most popular situational music ‘genres’.
+
+This increasing popularity for focus-enhancing songs is at odds with cognitive research into focus. According to these studies, the most ideal sound would be silence [Furnham & Strbac, 2002](https://www.tandfonline.com/doi/abs/10.1080/00140130210121932?journalCode=terg20). Introverts and extroverts both perform worse in the presence of music and noise.  Current research within this domain has continuously found that listening to music, or any other exposure to melodies is in fact obscuring the studying process. On the other hand, other researchers have coined the term ‘Mozart Effect’ when they documented the benefit that classical music can have on attention [Kristin et al., 1999](https://journals.sagepub.com/doi/abs/10.1111/1467-9280.00170?casa_token=AoN1ClcuJwQAAAAA:ZI7gexSGKabuEyZxylKpvXVOimkBN-U_If4S9MI8gCipkQ_T3Rfs6zncfz0FiX7GEIAL49Fsmz4). This striking discrepancy between observations as such and cognitive research was persuasive of our choice. We are extremely interested in what people do identify as focus-enhancing music and to what extent musical pieces that fall in this category can relate to the concept of genre.
+Due to the lack of theory on the subject, the research we performed was of exploratory nature. We, therefore, did not specify any hypotheses. However, as previous research has documented that individuals within specific demographic groups also share very similar musical prefrences; the music used for studying might be completely different for different demographics. Or it might be completely similar. Since this shifts an emphasis to the function of music being the accomplishment for certain tasks, very similar patterns coul lay out arguments for the contextual 'effectiveness' of certain music.
+
+
+### Methodology
+
+**Survey: Data Collection**
+
+A survey was conducted to collect data from participants that are currently studying. The goal was to retrieve a list of songs that survey participants have self-expressed to listen to (passively or actively) while engaging in study-related activities and was enhancing their focus. Additionally, the participants are also asked to supply known songs which they would never study to, such as distracting music, and music they want to dance to. This is because comparing our corpus to an anti-corpus might provide us with further insights (if there are clear patterns).
+
+Subsequently, we asked for their personality traits based on the Ten-Item Personality Inventory - TIPI [Gosling, Rentfrow & Swann, 2003](https://gosling.psy.utexas.edu/scales-weve-developed/ten-item-personality-measure-tipi/). With this, a brief measure of the Big-Five personality dimensions is made possible. The Big-Five consist of Openness, Conscientiousness, Extraversion, Neuroticism and Agreeableness.  The participant could choose the extent to which they agree to having several personal characteristics on a 7-point Likert-scale.
+
+Lastly, we gathered some information on their demographics, namely gender, age and study programme, which we can further use in our analyses. Study programme was categorized into the broader classification of [alpha, beta, and gamma faculties](https://cage.ugent.be/~gvernaev/uni.en.html). Alpha includes studies such as medicine and languages, beta includes any non-human natural sciences, such as maths, and gamma consists of studies focused on human behaviour, such as psychology and philosophy.
+
+We then created a list of “study” songs and a list of “antistudy” songs, or songs respondents would never listen to while studying. With the help of Spotify API we extracted song feature characteristics for further analysis.
+
+
+**Analysis**
+
+The objects (songs) are conceptualized as an aggregate of musical and melodic characteristics, in relation to Spotify's [‘’track features’’](https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/). Based on the degree and weight of reappearing patterns that collectively construct a single song (track) within the list of retrieved songs, potential arguments could be laid out for the expansion of music classification genres, as well as the affordance (obscuring or enhancing) it can have during cognitive tasks.
+
+The submitted songs are split into the “study” and “antistudy” group. For each group, track features are obtained. Then, an arithmetic mean and media are computed for each feature within the group. Since the mean and median do not differ significantly, we decide using the mean is appropriate. These values are then reported in the graphs and are used for further comparisons.
+
+All of the features except for tempo and loudness range from 0 to 1, and thus this is the scale we comply with in our graph. We adjust the tempo and loudness so that they fit between 0 and 100 in such a manner that they still carry information; are intuitive; and yet fit the new scale. In specific, loudness by definition ranges from -60 to 0, 0 being loud. Thus, we add 60 and divide by 60 (e.g. -25 changes to (-25+60)/60 = 0.583). This way we change the range between 0 and 1, where 1 is loud, as intuition suggests. Tempo is a bit more complicated. It is measured in beats per minute (BPM), and there is no clear limit to this. However, all of our songs were safely between 60 and 240 BPM, and we decided we would rescale tempo so that 60 becomes 0 and 240 becomes 1. Thus, if a song has 180 BPM, on our scale it would show as 0.67. Choosing the optimal way of rescaling was discussed many times, however, the differences between groups in tempo are insignificant and this can still be seen in our graphs. Seeing obvious differences or similarities is the most important part of meaningful visualisations, and thus we decided not to complicate the rescaling any further.
+
+**Demographic comparisons**
+
+Each respondent filled in the TIPI questionnaire. This allowed us to split the respondents within each dimension at the median and thus to get two sub-groups of participants per each dimension, based on whether they have a (relatively) higher or lower score in that trait (e.g. extroversy, or emotional stability). For each sub-group we compiled arithmetic means for track features for both “study” and “antistudy” music.
+
+Based on their academic paths, respondents were also split into the alpha, beta and gamma faculties. Again, within each sub-group, we compared “study” and “antistudy” music.
+
+All of these visualisations can be found under the “Discussion” tab.
+
+**Comparison with Spotify-curated study playlists**
+
+Spotify uses various models and calculations, but also user input to construct its playlists [study playlists](https://open.spotify.com/playlist/2sZBLyP4MCx7WEIJx2guLr), yet not many of us within our group use a 'Study playlist' while studying. We are therefore curious how these playlists compare with our collected 'study” music'. We picked the following playlists: “Jazz for Study”, “Deep Focus”, “Intense Studying” and “Instrumental Study”. Again, all of the song features were extracted, arithmetic means computed and compared with our playlist.
+
+**Sample**
+
+Our sample consists of students. None of the participants’ study programme falls into the alpha faculty, hence we can merely analyse the differences between beta and gamma studies. Our sample consisted of 52 participants, with ages ranging from 19 to 26 years old.
+
+
+Column {.tabset}
+-----------------------------------------
+### Population
+
+How Often Do You Listen To Music While Studying?
+
+```{r}
+library(plotly)
+
+fig <- plot_ly(x = c(9, 19, 17, 7), y = c('Rarely', 'Sometimes', 'Often', 'Always'), type = 'bar', orientation = 'h')
+
+fig
+```
+
+### By Faculty of Study
+```{r}
+library(plotly)
+colors <- c('rgb(211,94,96)', 'rgb(44, 160, 44)', 'rgb(144,103,167)', 'rgb(171,104,87)', 'rgb(114,147,203)')
+labels = c('Beta', 'Gamma')
+values = c(12, 40)
+fig <- plot_ly(type='pie', labels=labels, values=values, 
+               textinfo='label+percent',
+               insidetextorientation='radial',
+                 marker = list(colors = colors,
+                      line = list(color = '#FFFFFF', width = 1)),
+                     
+        showlegend = TRUE)
+fig <- fig %>% layout(title = 'Faculty of Study',
+         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+fig
+```
+
+### By Gender
+```{r}
+library(plotly)
+colors <- c('rgb(211,94,96)', 'rgb(44, 160, 44)', 'rgb(144,103,167)', 'rgb(171,104,87)', 'rgb(114,147,203)')
+labels = c('Male', 'Female', 'Prefer Not to Say')
+values = c(20, 31, 1)
+fig <- plot_ly(type='pie', labels=labels, values=values, 
+               textinfo='label+percent',
+               insidetextorientation='radial',
+                 marker = list(colors = colors,
+                      line = list(color = '#FFFFFF', width = 1)),
+                      #The 'pull' attribute can also be used to create space between the sectors
+        showlegend = TRUE)
+fig <- fig %>% layout(title = 'Gender Ratio',
+         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+fig
+```
+
+### By Personality
+```{r}
+library(plotly)
+fig <- plot_ly(y = list(3,4,5,6,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,10,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,12,12,12,12,13,13,13,13), type = "box", quartilemethod="inclusive", name="Extroversion")
+fig <- fig %>% add_trace(y = list(4,4,5,5,5,5,5,6,6,6,6,7,7,7,7,9,9,9,9,9,9,9,9,9,9,9,10,10,10,10,10,10,10,12,12,12,12,12,12,12,13), quartilemethod="inclusive", name="Emotional Stability")
+fig <- fig %>% add_trace(y = list(6,8,8,9,9,9,9,9,9,10,10,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,13,13,13,13,13,13,13,13,13,13,13,13,14,14), quartilemethod="inclusive", name="Openn to Experience")
+fig <- fig %>% layout(title = "TIPI Results")
+fig
+fig
+```
+
+
+Discussion
+=======================================================================
+
+Column {.tabset .tabset-fade}
+-----------------------------------------------
+### Discussion 
+
+As [Greb et al. (2017)](https://journals.sagepub.com/doi/10.1177/0305735617724883) suggest, the prefered musical aesthetic and liking of certain genres and subgenres is inherently linked to an individual’s personality and collective values. Therefore, different demographic groups commonly exhibit a fondness to certain genres and aversions to other ones.
+
+Given the established cognitive effects that different musical dynamics can have for diverse personalities, our findings suggest that the preferences for those dynamics are to a major extent similar across those groups for engagement with a study related context. All of the songs that were collected from different populations tend to be characterized by a high presence of ‘intrumentalness’ and ‘acousticness’, while ‘loudness’ tends to be low or absent. ‘Speechines’ (lyrical output) and ‘liveness’ tend to be low as well, but are just as low for focus-destructive music. Surprisingly, the music used for studying is also high in ‘danceability’ and ‘energy’, which are also the features correlating with music that is regarded as unfavorable for the same context.
+
+Besides the comparison between personality traits and study programs, the general results of the current study were also compared to Spotify’s focus-enhancing playlists. Firstly, the graphs are not similar. This indicates that there is not a situational music constellation as specifically as there is for genre. However, a few resemblances can be seen. Overall, ‘speechiness’ and ‘liveness’ tend to be low. Furthermore, despite the variety in the degree, ‘acousticness’ and ‘instrumentalness’ seem to be on the higher end. The features that fluctuate the most are ‘energy’, ‘valence’ and ‘danceability’.
+
+Our findings indicate that there is not a secret recipe to situational music. For what we have obtained, we can conclude that there is a semi-stable pattern for study music dynamics that is common across all demographics. However, when testing it against focus-related playlists that are popular on Spotify, the patterns shift. Accepting the premise that people do use Spotify playlists for their intended situation, the characterization of ‘focus-music’ gets complicated, whereas the characterization is more stable across the preferred study music of our participants. This shows just how complex situational music is. Nonetheless, we can distinguish a few convenient features.  In short, the widely used way of classifying music into genres cannot be used to classify music into its different functions. These results therefore pave the way for future research to delve into the topic of situational music further.
+
+### Limitations & Future Research
+
+**Limitations**
+
+Situational music is, as mentioned before, a very understudied subject. Therefore we don’t have a clear definition of ‘focus-enhancing’ music. Focus is a very large concept and applies to a lot of situations. We tried to limit focus by asking for music participants listen to while studying, but the term could be defined clearer in future research.
+ 
+Naming songs that enhance your focus is easier said than done. Therefore it is very possible that participants were not able to pick the three most focus-enhancing songs, but just the songs they, for example, recently listened to while studying. Multiple biases could be present in the choosing process such as the availability heuristic.
+ 
+The songs that enhance focus are conducted from students (because we asked for the songs they listen to while studying). The fact that the only results we have are from students, makes the result not generalizable to the entire population.
+
+Good portions of the analysis require a statistical background. Therefore, the manner in which we filtered and organized our data might contain errors, dut to a lack of quantitative methods at our study. This has also obsured us to perform calculations, to determine the exact extent to which the audio features actually differ per demographic.
+ 
+**Future research**
+
+We would be very interested in the information of why people listen to certain music while studying/focussing. Since the results show that some people use techno for focus, instead of classical music or calm music, the question why this is relaxing for them came to mind and would be meaningful for future research.
+
+By looking at the differences and similarities of melodic patterns, a t-test analysis could be conducted to get a better insight to how significant the differences are. 
+
+Qualitative interviews could also be conducted in the future, with the use of audio snipets to test how participants react to the survey item.
+ 
+Additionally, the focus of the research is on situational music, and we chose to aim at students that listen to music that enhances their focus. But, focus is definitely not the only situational music out there. Spotify is a professional in making situational music, but where the playlists are based upon is vague. Future research could include more investigation in situational music, and could give a better overview of this phenomena. 
+
+
+Column {.tabset .tabset-fade}
+-------------------------------------
+
+### **Faculty:** Beta
+ 
+```{r}
+library(plotly)
+fig <- plot_ly(
+    type = 'scatterpolar',
+    fill = 'toself',
+    mode = 'lines+markers'
+  ) 
+fig <- fig %>%
+  add_trace(
+    r = c(62, 29, 79, 11, 67, 30, 16, 57, 7),
+    theta = c('Danceability','Acousticness', 'Loudness', 'Speechiness', 'Energy', 'Tempo', 'Liveness', 'Valance', 'Instrumentalness'),
+    name = 'Anti-Study Music'
+  ) 
+fig <- fig %>%
+  add_trace(
+    r = c(54, 50, 12, 9, 43, 36, 18, 31, 52),
+    theta = c('Danceability','Acousticness', 'Loudness', 'Speechiness', 'Energy', 'Tempo', 'Liveness', 'Valance', 'Instrumentalness'),
+    name = 'Study Music'
+  ) 
+fig <- fig %>%
+  layout(
+    polar = list(
+      radialaxis = list(
+        visible = T,
+        range = c(0,100)
+      )
+    )
+  )
+fig
+```
+
+### Gamma
+
+```{r}
+library(plotly)
+fig <- plot_ly(
+    type = 'scatterpolar',
+    fill = 'toself',
+    mode = 'lines+markers'
+  ) 
+fig <- fig %>%
+  add_trace(
+    r = c(65, 18, 64, 13, 71, 34, 21, 54, 6),
+    theta = c('Danceability','Acousticness', 'Loudness', 'Speechiness', 'Energy', 'Tempo', 'Liveness', 'Valance', 'Instrumentalness'),
+    name = 'Anti-Study Music'
+  ) 
+fig <- fig %>%
+  add_trace(
+    r = c(59, 59, 12, 8, 45, 30, 14, 39, 42),
+    theta = c('Danceability','Acousticness', 'Loudness', 'Speechiness', 'Energy', 'Tempo', 'Liveness', 'Valance', 'Instrumentalness'),
+    name = 'Study Music'
+  ) 
+fig <- fig %>%
+  layout(
+    polar = list(
+      radialaxis = list(
+        visible = T,
+        range = c(0,100)
+      )
+    )
+  )
+fig
+```   
+
+### **Personality:** Extroversion
+```{r}
+library(plotly)
+fig <- plot_ly(
+    type = 'scatterpolar',
+    fill = 'toself',
+    mode = 'lines+markers'
+  ) 
+fig <- fig %>%
+  add_trace(
+    r = c(66, 14, 68, 69, 22, 32, 20, 56, 7),
+    theta = c('Danceability','Acousticness', 'Loudness', 'Speechiness', 'Energy', 'Tempo', 'Liveness', 'Valance', 'Instrumentalness'),
+    name = 'Anti-Study Music'
+  ) 
+fig <- fig %>%
+  add_trace(
+    r = c(59, 49, 12, 9, 44, 32, 17, 38, 47),
+    theta = c('Danceability','Acousticness', 'Loudness', 'Speechiness', 'Energy', 'Tempo', 'Liveness', 'Valance', 'Instrumentalness'),
+    name = 'Study Music'
+  ) 
+fig <- fig %>%
+  layout(
+    polar = list(
+      radialaxis = list(
+        visible = T,
+        range = c(0,100)
+      )
+    )
+  )
+fig
+```
+
+### Introversion
+```{r}
+library(plotly)
+fig <- plot_ly(
+    type = 'scatterpolar',
+    fill = 'toself',
+    mode = 'lines+markers'
+  ) 
+fig <- fig %>%
+  add_trace(
+    r = c(63,	16, 66, 19,	72, 32,	20, 53, 7
+),
+    theta = c('Danceability','Acousticness', 'Loudness', 'Speechiness', 'Energy', 'Tempo', 'Liveness', 'Valance', 'Instrumentalness'),
+    name = 'Anti-Study Music'
+  ) 
+fig <- fig %>%
+  add_trace(
+    r = c(58, 49, 12, 7, 46, 30, 13, 37, 40),
+    theta = c('Danceability','Acousticness', 'Loudness', 'Speechiness', 'Energy', 'Tempo', 'Liveness', 'Valance', 'Instrumentalness'),
+    name = 'Study Music'
+  ) 
+fig <- fig %>%
+  layout(
+    polar = list(
+      radialaxis = list(
+        visible = T,
+        range = c(0,100)
+      )
+    )
+  )
+fig
+```
+
+### **Emotional Stability:** High 
+```{r}
+library(plotly)
+fig <- plot_ly(
+    type = 'scatterpolar',
+    fill = 'toself',
+    mode = 'lines+markers'
+  ) 
+fig <- fig %>%
+  add_trace(
+    r = c(67,	23, 68, 14,	69,	31,	19, 52, 10
+),
+    theta = c('Danceability','Acousticness', 'Loudness', 'Speechiness', 'Energy', 'Tempo', 'Liveness', 'Valance', 'Instrumentalness'),
+    name = 'Anti-Study Music'
+  ) 
+fig <- fig %>%
+  add_trace(
+    r = c(58,	49,	12,	9,	45,	32,	15,	37,	46
+),
+    theta = c('Danceability','Acousticness', 'Loudness', 'Speechiness', 'Energy', 'Tempo', 'Liveness', 'Valance', 'Instrumentalness'),
+    name = 'Study Music'
+  ) 
+fig <- fig %>%
+  layout(
+    polar = list(
+      radialaxis = list(
+        visible = T,
+        range = c(0,100)
+      )
+    )
+  )
+fig
+```
+
+### Low
+```{r}
+library(plotly)
+fig <- plot_ly(
+    type = 'scatterpolar',
+    fill = 'toself',
+    mode = 'lines+markers'
+  ) 
+fig <- fig %>%
+  add_trace(
+    r = c(63,	16, 66, 19,	72, 32,	20, 53, 7
+),
+    theta = c('Danceability','Acousticness', 'Loudness', 'Speechiness', 'Energy', 'Tempo', 'Liveness', 'Valance', 'Instrumentalness'),
+    name = 'Anti-Study Music'
+  ) 
+fig <- fig %>%
+  add_trace(
+    r = c(58, 49, 12, 7, 46, 30, 13, 37, 40),
+    theta = c('Danceability','Acousticness', 'Loudness', 'Speechiness', 'Energy', 'Tempo', 'Liveness', 'Valance', 'Instrumentalness'
+              
+              ),
+    name = 'Study Music'
+  ) 
+fig <- fig %>%
+  layout(
+    polar = list(
+      radialaxis = list(
+        visible = T,
+        range = c(0,100)
+      )
+    )
+  )
+fig
+```
+
+Academic References
+==================================================================================
+Column
+------------------------------------
+### This Study is Made for:
+
+From Objects to Data, Final Project
+
+Bruno Sotic
+11353473
+
+Helge Moes
+11348801
+
+Bruno Koldeweij
+12289434
+
+Work Group 30
+
+Theacher: Dr. ir. J. Kamps
+
+Column
+------------------------------------
+### Used for this Study
+
+Furnham, A., & Strbac, L. (2002). Music is as distracting as noise: the differential distraction of background music and noise on the cognitive test performance of introverts and extraverts. Ergonomics, 45(3), 203-217.
+Gosling, S. D., Rentfrow, P. J., & Swann, W. B., Jr. (2003). A very brief measure of the Big-Five personality domains. Journal of Research in Personality, 37(6), 504–528. https://doi.org/10.1016/S0092-6566(03)00046-1
+
+Gjerdingen, R. O., & Perrott, D. (2008). Scanning the dial: The rapid recognition of music genres. Journal of New Music Research, 37(2), 93-100.
+Kaminskas, M., & Ricci, F. (2012). Contextual music information retrieval and recommendation: State of the art and challenges. Computer Science Review, 6(2-3), 89-119.
+
+Airoldi, Massimo, Davide Beraldo, and Alessandro Gandini. “Follow the Algorithm: An Exploratory Investigation of Music on YouTube.” Poetics 57 (August 1, 2016): 1–13. https://doi.org/10.1016/j.poetic.2016.05.001.
+
+Downie, J. Stephen. “Music Information Retrieval.” Annual Review of Information Science and Technology 37, no. 1 (2003): 295–340. https://doi.org/10.1002/aris.1440370108.
+
+The Information Lab. “Getting Audio Features from the Spotify API,” August 8, 2019. https://www.theinformationlab.co.uk/2019/08/08/getting-audio-features-from-the-spotify-api/.
+
+Gjerdingen, Robert O., and David Perrott. “Scanning the Dial: The Rapid Recognition of Music Genres.” Journal of New Music Research 37, no. 2 (June 1, 2008): 93–100. https://doi.org/10.1080/09298210802479268.
+
+Greb, Fabian, Wolff Schlotz, and Jochen Steffens. “Personal and Situational Influences on the Functions of Music Listening:” Psychology of Music, August 24, 2017. https://doi.org/10.1177/0305735617724883.
+
+Greb, Fabian, Jochen Steffens, and Wolff Schlotz. “Modeling Music-Selection Behavior in Everyday Life: A Multilevel Statistical Learning Approach and Mediation Analysis of Experience Sampling Data.” Frontiers in Psychology 10 (2019). https://doi.org/10.3389/fpsyg.2019.00390.
+
+Nantais, Kristin M., and E. Glenn Schellenberg. “The Mozart Effect: An Artifact of Preference.” Psychological Science 10, no. 4 (July 1, 1999): 370–73. https://doi.org/10.1111/1467-9280.00170.
+
+Nijkamp, Rutger. “Prediction of Product Success: Explaining Song Popularity by Audio Features from Spotify Data,” n.d., 9.
+Schäfer, Thomas, and Peter Sedlmeier. “What Makes Us like Music? Determinants of Music Preference.” Psychology of Aesthetics, Creativity, and the Arts 4, no. 4 (2010): 223–34. https://doi.org/10.1037/a0018374.
+
+Sturm, Bob L. “An Analysis of the GTZAN Music Genre Dataset.” In Proceedings of the Second International ACM Workshop on Music Information Retrieval with User-Centered and Multimodal Strategies, 7–12. MIRUM ’12. Nara, Japan: Association for Computing Machinery, 2012. https://doi.org/10.1145/2390848.2390851.
